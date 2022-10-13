@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>MakoIoT.Device.Services.Messaging</id>
+    <version>$version$</version>
+    <title>MakoIoT.Device.Services.Messaging</title>
+    <authors>CSHARK</authors>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <license type="file">LICENSE.md</license>
+    <releaseNotes>
+    </releaseNotes>
+    <readme>docs\README.md</readme>
+    <developmentDependency>false</developmentDependency>
+    <projectUrl>https://github.com/CShark-Hub/Mako-IoT.Device.Services.Messaging</projectUrl>
+    <repository type="git" url="https://github.com/CShark-Hub/Mako-IoT.Device.Services.Messaging" />
+    <copyright>Copyright (c) CSHARK Sp. z o. o.</copyright>
+    <description>Message bus for MAKO-IoT</description>
+    <tags>nanoFramework C# csharp netmf netnf mako-iot message bus</tags>
+    <dependencies>
+	    <dependency id="Mako.nanoFramework.Json" version="2.2.8" />
+	    <dependency id="MakoIoT.Device.Services.DependencyInjection" version="1.0.3" />
+	    <dependency id="MakoIoT.Device.Services.Interface" version="1.0.3" />
+	    <dependency id="MakoIoT.Device.Utilities.String" version="1.0.2" />
+	    <dependency id="nanoFramework.CoreLibrary" version="1.12.0" />
+	    <dependency id="nanoFramework.Logging" version="1.1.25" />
+	    <dependency id="nanoFramework.System.Collections" version="1.4.0" />
+	    <dependency id="nanoFramework.System.IO.Streams" version="1.1.15" />
+	    <dependency id="nanoFramework.System.Text" version="1.2.7" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="src\MakoIoT.Device.Services.Messaging\bin\Release\MakoIoT.Device.Services.Messaging.dll" target="lib\MakoIoT.Device.Services.Messaging.dll" />
+    <file src="src\MakoIoT.Device.Services.Messaging\bin\Release\MakoIoT.Device.Services.Messaging.pdb" target="lib\MakoIoT.Device.Services.Messaging.pdb" />
+    <file src="src\MakoIoT.Device.Services.Messaging\bin\Release\MakoIoT.Device.Services.Messaging.pdbx" target="lib\MakoIoT.Device.Services.Messaging.pdbx" />
+    <file src="src\MakoIoT.Device.Services.Messaging\bin\Release\MakoIoT.Device.Services.Messaging.pe" target="lib\MakoIoT.Device.Services.Messaging.pe" />
+    <file src="README.md" target="docs\" />
+    <file src="LICENSE.md" target="" />
+  </files>
+</package>
