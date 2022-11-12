@@ -18,7 +18,7 @@ pool:
 variables:
 - group: mako-iot-github
 - name: runSettingsFile
-  value: 'Tests\MakoIoT.Device.Services.Messaging.Test\nano.runsettings'
+  value: '.runsettings'
 - name: packageName
   value: 'MakoIoT.Device.Services.Messaging'
 
