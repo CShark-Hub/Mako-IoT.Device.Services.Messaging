@@ -21,10 +21,7 @@ namespace MakoIoT.Device.Services.Messaging
         private readonly ICommunicationService _communicationService;
         private readonly ILogger _logger;
 
-        static MessageBus()
-        {
-            nanoFramework.Json.Configuration.ConvertersMapping.Add(typeof(IMessage), new IMessageConvert());
-        }
+        private static bool isInitialized;
 
         public MessageBus(ICommunicationService communicationService, ILogger logger, MessageBusOptions options)
         {
@@ -81,7 +78,6 @@ namespace MakoIoT.Device.Services.Messaging
                 _ => throw new ArgumentException(string.Format("{0} is not supported", consumeStrategy))
             };
         }
-
 
         public void RegisterDirectMessageConsumer(Type messageType, Type consumerType, ConsumeStrategy consumeStrategy)
         {
@@ -156,8 +152,15 @@ namespace MakoIoT.Device.Services.Messaging
             return envelopeString;
         }
 
-        internal void OnMessageReceived(object sender, EventArgs e)
+        public void OnMessageReceived(object sender, EventArgs e)
         {
+            // TODO: without static?
+            if (!isInitialized)
+            {
+                nanoFramework.Json.Configuration.ConvertersMapping.Add(typeof(IMessage), new IMessageConvert());
+                isInitialized = true;
+            }
+
             try
             {
                 var envelope = (Envelope)JsonConvert.DeserializeObject((string)((ObjectEventArgs)e).Data, typeof(Envelope));

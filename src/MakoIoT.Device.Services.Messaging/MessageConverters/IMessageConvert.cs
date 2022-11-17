@@ -1,11 +1,15 @@
-﻿using nanoFramework.Json.Converters;
+﻿using MakoIoT.Messages;
+using nanoFramework.Json;
+using nanoFramework.Json.Converters;
 using System;
+using System.Collections;
+using System.Text;
 
 namespace MakoIoT.Device.Services.Messaging.MessageConverters
 {
-    // TODO: Tests
-    class IMessageConvert : IConverter
+    sealed class IMessageConvert : IConverter
     {
+        private const string MessageTypeKey = nameof(IMessage.MessageType);
         public string ToJson(object value)
         {
             throw new NotImplementedException();
@@ -13,9 +17,47 @@ namespace MakoIoT.Device.Services.Messaging.MessageConverters
 
         public object ToType(object value)
         {
-            // TODO: Find message type from object
-            // TODO: call deserialization with that type
-            throw new NotImplementedException();
+            var jsonObject = (JsonObject)value;
+            var msgTypeJsonValue= (JsonValue)jsonObject.Get(MessageTypeKey).Value;
+            var msgTypeString = msgTypeJsonValue.Value.ToString();
+            var msgType = Type.GetType(msgTypeString);
+
+            if (msgType == null)
+            {
+                throw new Exception("Unable to find type.");
+            }
+
+            // Convert from Json objects to hashtable
+            // Then call serialization to get json string
+            // Then call deserialization with proper object
+            var hashtable = ExtractKeyValuePairsFromJsonObject(jsonObject);
+            var sectionAsJson = JsonConvert.SerializeObject(hashtable);
+            Console.WriteLine(sectionAsJson);
+            var obj = JsonConvert.DeserializeObject(sectionAsJson, msgType);
+            return obj;
+        }
+        
+        private Hashtable ExtractKeyValuePairsFromJsonObject(JsonObject jsonObject)
+        {
+            // TODO: Recursive with nested objects 
+            var hashtable = new Hashtable();
+            foreach (var item in jsonObject.Members)
+            {
+                // TODO: Other types?
+                if (item is JsonProperty jsonProperty)
+                {
+                    var keyJsonProp = jsonProperty.Name;
+                    var jsonValue = (JsonValue)jsonProperty.Value;
+                    var propValue = jsonValue.Value;
+
+                    hashtable.Add(keyJsonProp, propValue);
+                    continue;
+                }
+
+                throw new NotSupportedException();
+            }
+
+            return hashtable;
         }
     }
 }

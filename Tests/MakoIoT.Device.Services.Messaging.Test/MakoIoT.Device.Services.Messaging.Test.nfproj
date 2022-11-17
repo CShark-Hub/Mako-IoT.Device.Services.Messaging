@@ -27,9 +27,9 @@
     <Compile Include="ConsumerQueueTest.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="MessageBusTest.cs" />
+    <Compile Include="MessageConverters\IMessageConvertTest.cs" />
     <Compile Include="Mocks\MockCommunicationService.cs" />
     <Compile Include="Mocks\MockLogger.cs" />
-    <Compile Include="MessageBusTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MakoIoT.Device.Services.Interface">
@@ -39,7 +39,7 @@
       <HintPath>..\..\packages\nanoFramework.CoreLibrary.1.12.0\lib\mscorlib.dll</HintPath>
     </Reference>
     <Reference Include="nanoFramework.Json">
-      <HintPath>..\..\packages\nanoFramework.Json.2.2.63\lib\nanoFramework.Json.dll</HintPath>
+      <HintPath>..\..\packages\nanoFramework.Json.2.2.72\lib\nanoFramework.Json.dll</HintPath>
     </Reference>
     <Reference Include="nanoFramework.Logging">
       <HintPath>..\..\packages\nanoFramework.Logging.1.1.25\lib\nanoFramework.Logging.dll</HintPath>
