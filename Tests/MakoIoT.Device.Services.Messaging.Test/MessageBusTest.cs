@@ -5,8 +5,6 @@ using MakoIoT.Messages;
 using Microsoft.Extensions.Logging;
 using nanoFramework.TestFramework;
 
-// using System.Text.RegularExpressions;
-
 namespace MakoIoT.Device.Services.Messaging.Test
 {
     [TestClass]

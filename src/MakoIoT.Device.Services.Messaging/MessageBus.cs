@@ -141,7 +141,7 @@ namespace MakoIoT.Device.Services.Messaging
             
         }
 
-        private string WrapMessage(IMessage message)
+        internal string WrapMessage(IMessage message)
         {
             var envelope = new Envelope
             {
@@ -158,7 +158,7 @@ namespace MakoIoT.Device.Services.Messaging
             return envelopeString;
         }
 
-        public void OnMessageReceived(object sender, EventArgs e)
+        internal void OnMessageReceived(object sender, EventArgs e)
         {
             try
             {

@@ -26,6 +26,7 @@
   <ItemGroup>
     <Compile Include="ConsumerQueueTest.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="MessageBusSerializationTest.cs" />
     <Compile Include="MessageBusTest.cs" />
     <Compile Include="MessageConverters\IMessageConvertTest.cs" />
     <Compile Include="Mocks\MockCommunicationService.cs" />

@@ -3,7 +3,6 @@ using nanoFramework.Json;
 using nanoFramework.Json.Converters;
 using System;
 using System.Collections;
-using System.Text;
 
 namespace MakoIoT.Device.Services.Messaging.MessageConverters
 {
@@ -32,23 +31,19 @@ namespace MakoIoT.Device.Services.Messaging.MessageConverters
             // Then call deserialization with proper object
             var hashtable = ExtractKeyValuePairsFromJsonObject(jsonObject);
             var sectionAsJson = JsonConvert.SerializeObject(hashtable);
-            Console.WriteLine(sectionAsJson);
             var obj = JsonConvert.DeserializeObject(sectionAsJson, msgType);
             return obj;
         }
         
         private Hashtable ExtractKeyValuePairsFromJsonObject(JsonObject jsonObject)
         {
-            // TODO: Recursive with nested objects 
             var hashtable = new Hashtable();
             foreach (var item in jsonObject.Members)
             {
-                // TODO: Other types?
                 if (item is JsonProperty jsonProperty)
                 {
                     var keyJsonProp = jsonProperty.Name;
-                    var jsonValue = (JsonValue)jsonProperty.Value;
-                    var propValue = jsonValue.Value;
+                    var propValue = HandleValue(jsonProperty.Value);
 
                     hashtable.Add(keyJsonProp, propValue);
                     continue;
@@ -58,6 +53,21 @@ namespace MakoIoT.Device.Services.Messaging.MessageConverters
             }
 
             return hashtable;
+        }
+
+        private object HandleValue(JsonToken token)
+        {
+            if (token is JsonValue value)
+            {
+                return value.Value;
+            }
+
+            if (token is JsonObject obj)
+            {
+                return ExtractKeyValuePairsFromJsonObject(obj);
+            }
+
+            throw new NotSupportedException();
         }
     }
 }
