@@ -1,14 +1,16 @@
-﻿using System;
+﻿using System.Runtime.CompilerServices;
+using System;
 using System.Collections;
 using MakoIoT.Device.Services.DependencyInjection;
 using MakoIoT.Device.Services.Interface;
-using MakoIoT.Device.Services.Messaging.Extensions;
 using MakoIoT.Device.Services.Messaging.MessageProcessing;
 using MakoIoT.Device.Utilities.String.Extensions;
 using MakoIoT.Messages;
 using Microsoft.Extensions.Logging;
 using nanoFramework.Json;
+using MakoIoT.Device.Services.Messaging.MessageConverters;
 
+[assembly: InternalsVisibleTo("NFUnitTest")]
 namespace MakoIoT.Device.Services.Messaging
 {
     public class MessageBus : IMessageBus
@@ -19,8 +21,16 @@ namespace MakoIoT.Device.Services.Messaging
         private readonly ICommunicationService _communicationService;
         private readonly ILogger _logger;
 
+        private static bool isInitialized;
+
         public MessageBus(ICommunicationService communicationService, ILogger logger, MessageBusOptions options)
         {
+            if (!isInitialized)
+            {
+                nanoFramework.Json.Configuration.ConvertersMapping.Add(typeof(IMessage), new IMessageConvert());
+                isInitialized = true;
+            }
+
             _communicationService = communicationService;
             _logger = logger;
 
@@ -74,7 +84,6 @@ namespace MakoIoT.Device.Services.Messaging
                 _ => throw new ArgumentException(string.Format("{0} is not supported", consumeStrategy))
             };
         }
-
 
         public void RegisterDirectMessageConsumer(Type messageType, Type consumerType, ConsumeStrategy consumeStrategy)
         {
@@ -132,7 +141,7 @@ namespace MakoIoT.Device.Services.Messaging
             
         }
 
-        private string WrapMessage(IMessage message)
+        internal string WrapMessage(IMessage message)
         {
             var envelope = new Envelope
             {
@@ -149,14 +158,11 @@ namespace MakoIoT.Device.Services.Messaging
             return envelopeString;
         }
 
-        private void OnMessageReceived(object sender, EventArgs e)
+        internal void OnMessageReceived(object sender, EventArgs e)
         {
             try
             {
-                var envelope = (Envelope)JsonConvert.DeserializeObject((string)((ObjectEventArgs)e).Data, typeof(Envelope), new Hashtable
-                {
-                    {typeof(IMessage), nameof(IMessage.MessageType)}
-                });
+                var envelope = (Envelope)JsonConvert.DeserializeObject((string)((ObjectEventArgs)e).Data, typeof(Envelope));
 
                 if (!_consumerQueues.Contains(envelope.Message.MessageType))
                 {
