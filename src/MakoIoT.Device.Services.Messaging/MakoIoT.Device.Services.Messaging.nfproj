@@ -31,15 +31,15 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MakoIoT.Device.Services.DependencyInjection, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\..\packages\MakoIoT.Device.Services.DependencyInjection.1.0.11.24156\lib\MakoIoT.Device.Services.DependencyInjection.dll</HintPath>
+      <HintPath>..\..\packages\MakoIoT.Device.Services.DependencyInjection.1.0.15.33629\lib\MakoIoT.Device.Services.DependencyInjection.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="MakoIoT.Device.Services.Interface, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\..\packages\MakoIoT.Device.Services.Interface.1.0.11.41025\lib\MakoIoT.Device.Services.Interface.dll</HintPath>
+      <HintPath>..\..\packages\MakoIoT.Device.Services.Interface.1.0.15.14787\lib\MakoIoT.Device.Services.Interface.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="MakoIoT.Device.Utilities.String, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\..\packages\MakoIoT.Device.Utilities.String.1.0.10.62544\lib\MakoIoT.Device.Utilities.String.dll</HintPath>
+      <HintPath>..\..\packages\MakoIoT.Device.Utilities.String.1.0.15.64242\lib\MakoIoT.Device.Utilities.String.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="mscorlib">
