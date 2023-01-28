@@ -42,9 +42,9 @@ namespace MakoIoT.Device.Services.Messaging.Test.MessageConverters
 
             var output = converter.ToType(inputData);
 
-            Assert.Equal(output.GetType().FullName, typeof(TestMessage).FullName);
+            Assert.AreEqual(output.GetType().FullName, typeof(TestMessage).FullName);
             var asMessage = (TestMessage)output;
-            Assert.Equal(asMessage.Text, textToCheck);
+            Assert.AreEqual(asMessage.Text, textToCheck);
         }
 
         [TestMethod]
@@ -62,10 +62,10 @@ namespace MakoIoT.Device.Services.Messaging.Test.MessageConverters
 
             var output = converter.ToType(inputData);
 
-            Assert.Equal(output.GetType().FullName, typeof(TestMessageNested).FullName);
+            Assert.AreEqual(output.GetType().FullName, typeof(TestMessageNested).FullName);
             var asMessage = (TestMessageNested)output;
-            Assert.Equal(asMessage.Text, textToCheck);
-            Assert.Equal(asMessage.MessageInternal.Text, internalMessageText);
+            Assert.AreEqual(asMessage.Text, textToCheck);
+            Assert.AreEqual(asMessage.MessageInternal.Text, internalMessageText);
         }
 
     }

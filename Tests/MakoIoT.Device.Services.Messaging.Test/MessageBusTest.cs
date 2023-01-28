@@ -21,7 +21,7 @@ namespace MakoIoT.Device.Services.Messaging.Test
             var logger = new MockLogger();
             var commSvc = new MockCommunicationService();
         
-            var bus = new MessageBus(commSvc, logger, new MessageBusOptions());
+            var bus = new MessageBus(commSvc, logger, new MessageBusOptions(), null);
         
             bus.RegisterDirectMessageConsumer(typeof(TestMessage), typeof(TestMessageConsumer), ConsumeStrategy.Synchronous);
         
@@ -29,8 +29,8 @@ namespace MakoIoT.Device.Services.Messaging.Test
         
             commSvc.InvokeMessageReceived(messageText);
             
-            Assert.True(ConsumerCalled);
-            Assert.False(logger.HasWarningsOrErrors);
+            Assert.IsTrue(ConsumerCalled);
+            Assert.IsFalse(logger.HasWarningsOrErrors);
         }
 
         [TestMethod]
@@ -42,7 +42,7 @@ namespace MakoIoT.Device.Services.Messaging.Test
 
             var commSvc = new MockCommunicationService();
 
-            var bus = new MessageBus(commSvc, logger, new MessageBusOptions());
+            var bus = new MessageBus(commSvc, logger, new MessageBusOptions(), null);
 
             bus.RegisterDirectMessageConsumer(typeof(TestMessage), typeof(TestMessageConsumer), ConsumeStrategy.Synchronous);
 
@@ -50,9 +50,9 @@ namespace MakoIoT.Device.Services.Messaging.Test
 
             commSvc.InvokeMessageReceived(messageText);
 
-            Assert.Equal(1, logger.GetMessages(LogLevel.Error).Count);
+            Assert.AreEqual(1, logger.GetMessages(LogLevel.Error).Count);
             
-            Assert.False(ConsumerCalled);
+            Assert.IsFalse(ConsumerCalled);
         }
 
         [TestMethod]
@@ -64,7 +64,7 @@ namespace MakoIoT.Device.Services.Messaging.Test
 
             var commSvc = new MockCommunicationService();
 
-            var bus = new MessageBus(commSvc, logger, new MessageBusOptions());
+            var bus = new MessageBus(commSvc, logger, new MessageBusOptions(), null);
 
             bus.RegisterDirectMessageConsumer(typeof(TestMessage), typeof(TestMessageConsumer), ConsumeStrategy.Synchronous);
 
@@ -72,9 +72,9 @@ namespace MakoIoT.Device.Services.Messaging.Test
 
             commSvc.InvokeMessageReceived(messageText);
 
-            Assert.Equal(1, logger.GetMessages(LogLevel.Warning).Count);
-            Assert.False(logger.HasErrors);
-            Assert.False(ConsumerCalled);
+            Assert.AreEqual(1, logger.GetMessages(LogLevel.Warning).Count);
+            Assert.IsFalse(logger.HasErrors);
+            Assert.IsFalse(ConsumerCalled);
         }
 
         [TestMethod]
@@ -84,74 +84,15 @@ namespace MakoIoT.Device.Services.Messaging.Test
 
             var commSvc = new MockCommunicationService();
 
-            var bus = new MessageBus(commSvc, logger, new MessageBusOptions());
+            var bus = new MessageBus(commSvc, logger, new MessageBusOptions(), null);
 
             bus.RegisterSubscriptionConsumer(typeof(TestMessage), typeof(TestMessageConsumer), ConsumeStrategy.Synchronous);
 
             bus.Start();
 
-            Assert.NotNull(commSvc.Subscriptions);
-            Assert.True(commSvc.Subscriptions.Contains(typeof(TestMessage).FullName));
+            Assert.IsNotNull(commSvc.Subscriptions);
+            Assert.IsTrue(commSvc.Subscriptions.Contains(typeof(TestMessage).FullName));
         }
-
-
-        // [TestMethod]
-        // public void Publish_should_publish_wrapped_message()
-        // {
-        //     var expectedTopic = "CShark.Mako.Iot.Client.Test.MessageBusTest+TestMessage";
-        //     var expectedMessageRegex =
-        //         new Regex(
-        //             "\\{.*\"Message\":\\{\"Text\":\"Hello!\",\"MessageType\":\"CShark\\.Mako\\.Iot\\.Client\\.Test\\.MessageBusTest\\+TestMessage\"\\}.*\\}");
-        //
-        //     var logger = new MockLogger();
-        //
-        //     var commSvc = new MockCommunicationService
-        //     {
-        //         CanSend = true
-        //     };
-        //
-        //     var bus = new MessageBus(commSvc, logger);
-        //
-        //     var message = new TestMessage
-        //     {
-        //         Text = "Hello!"
-        //     };
-        //     
-        //     bus.Publish(message);
-        //
-        //     Assert.True(expectedMessageRegex.IsMatch(commSvc.MessageSent));
-        //     Assert.Equal(expectedTopic, commSvc.TopicSent);
-        //     Assert.False(logger.HasWarningsOrErrors);
-        // }
-        //
-        // [TestMethod]
-        // public void Send_should_send_wrapped_message()
-        // {
-        //     var recipient = "message-recipient";
-        //     var expectedMessageRegex =
-        //         new Regex(
-        //             "\\{.*\"Message\":\\{\"Text\":\"Hello!\",\"MessageType\":\"CShark\\.Mako\\.Iot\\.Client\\.Test\\.MessageBusTest\\+TestMessage\"\\}.*\\}");
-        //
-        //     var logger = new MockLogger();
-        //
-        //     var commSvc = new MockCommunicationService
-        //     {
-        //         CanSend = true
-        //     };
-        //
-        //     var bus = new MessageBus(commSvc, logger);
-        //
-        //     var message = new TestMessage
-        //     {
-        //         Text = "Hello!"
-        //     };
-        //
-        //     bus.Send(message, recipient);
-        //
-        //     Assert.True(expectedMessageRegex.IsMatch(commSvc.MessageSent));
-        //     Assert.Equal(recipient, commSvc.TopicSent);
-        //     Assert.False(logger.HasWarningsOrErrors);
-        // }
 
         public class TestMessage : IMessage
         {
@@ -180,7 +121,7 @@ namespace MakoIoT.Device.Services.Messaging.Test
             public void Consume(ConsumeContext context)
             {
                 var m = context.Message as TestMessage;
-                Assert.NotNull(m);
+                Assert.IsNotNull(m);
                 Debug.WriteLine($"TestMessageConsumer : {m.Text}");
 
                 ConsumerCalled = true;

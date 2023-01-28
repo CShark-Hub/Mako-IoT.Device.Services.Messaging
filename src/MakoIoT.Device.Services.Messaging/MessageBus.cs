@@ -1,7 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
 using System;
 using System.Collections;
-using MakoIoT.Device.Services.DependencyInjection;
 using MakoIoT.Device.Services.Interface;
 using MakoIoT.Device.Services.Messaging.MessageProcessing;
 using MakoIoT.Device.Utilities.String.Extensions;
@@ -9,6 +8,7 @@ using MakoIoT.Messages;
 using Microsoft.Extensions.Logging;
 using nanoFramework.Json;
 using MakoIoT.Device.Services.Messaging.MessageConverters;
+using nanoFramework.DependencyInjection;
 
 [assembly: InternalsVisibleTo("NFUnitTest")]
 namespace MakoIoT.Device.Services.Messaging
@@ -20,10 +20,11 @@ namespace MakoIoT.Device.Services.Messaging
 
         private readonly ICommunicationService _communicationService;
         private readonly ILogger _logger;
+        private readonly IServiceProvider serviceProvider;
 
         private static bool isInitialized;
 
-        public MessageBus(ICommunicationService communicationService, ILogger logger, MessageBusOptions options)
+        public MessageBus(ICommunicationService communicationService, ILogger logger, MessageBusOptions options, IServiceProvider serviceProvider)
         {
             if (!isInitialized)
             {
@@ -33,7 +34,7 @@ namespace MakoIoT.Device.Services.Messaging
 
             _communicationService = communicationService;
             _logger = logger;
-
+            this.serviceProvider = serviceProvider;
             foreach (Type key in options.DirectConsumers.Keys)
             {
                 var value = (ConsumersMapping)options.DirectConsumers[key];
@@ -78,9 +79,9 @@ namespace MakoIoT.Device.Services.Messaging
         {
             return consumeStrategy switch
             {
-                ConsumeStrategy.FIFO => new FifoConsumerQueue(consumerType.Name, () => (IConsumer)DI.BuildUp(consumerType), _logger),
-                ConsumeStrategy.LastMessageWins => new LastMessageWinsConsumerQueue(consumerType.Name, () => (IConsumer)DI.BuildUp(consumerType), _logger),
-                ConsumeStrategy.Synchronous => new SynchronousConsumerQueue(consumerType.Name, () => (IConsumer)DI.BuildUp(consumerType), _logger),
+                ConsumeStrategy.FIFO => new FifoConsumerQueue(consumerType.Name, () => (IConsumer)ActivatorUtilities.CreateInstance(serviceProvider, consumerType), _logger),
+                ConsumeStrategy.LastMessageWins => new LastMessageWinsConsumerQueue(consumerType.Name, () => (IConsumer)ActivatorUtilities.CreateInstance(serviceProvider, consumerType), _logger),
+                ConsumeStrategy.Synchronous => new SynchronousConsumerQueue(consumerType.Name, () => (IConsumer)ActivatorUtilities.CreateInstance(serviceProvider, consumerType), _logger),
                 _ => throw new ArgumentException(string.Format("{0} is not supported", consumeStrategy))
             };
         }

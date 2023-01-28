@@ -1,5 +1,5 @@
-﻿using MakoIoT.Device.Services.DependencyInjection;
-using MakoIoT.Device.Services.Interface;
+﻿using MakoIoT.Device.Services.Interface;
+using nanoFramework.DependencyInjection;
 
 namespace MakoIoT.Device.Services.Messaging.Extensions
 {
@@ -12,24 +12,24 @@ namespace MakoIoT.Device.Services.Messaging.Extensions
             return builder.AddMessageBus(o => { });
         }
 
-        private static void Builder_DeviceStopped(object sender, System.EventArgs e)
+        private static void Builder_DeviceStopped(IDevice sender)
         {
-            var mb = (IMessageBus)DI.Resolve(typeof(IMessageBus));
+            var mb = (IMessageBus)sender.ServiceProvider.GetService(typeof(IMessageBus));
             mb.Stop();
         }
 
-        private static void Builder_DeviceStarting(object sender, System.EventArgs e)
+        private static void Builder_DeviceStarting(IDevice sender)
         {
-            var mb = (IMessageBus)DI.Resolve(typeof(IMessageBus));
+            var mb = (IMessageBus)sender.ServiceProvider.GetService(typeof(IMessageBus));
             mb.Start();
         }
 
         public static IDeviceBuilder AddMessageBus(this IDeviceBuilder builder, MessageBusConfigurator configurator)
         {
-            DI.RegisterSingleton(typeof(IMessageBus), typeof(MessageBus));
+            builder.Services.AddSingleton(typeof(IMessageBus), typeof(MessageBus));
             var options = new MessageBusOptions();
             configurator(options);
-            DI.RegisterInstance(typeof(MessageBusOptions), options);
+            builder.Services.AddSingleton(typeof(MessageBusOptions), options);
 
             builder.DeviceStarting += Builder_DeviceStarting;
             builder.DeviceStopped += Builder_DeviceStopped;
