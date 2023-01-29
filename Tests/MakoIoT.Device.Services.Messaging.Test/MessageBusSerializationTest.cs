@@ -48,17 +48,17 @@ namespace MakoIoT.Device.Services.Messaging.Test
                 }
             };
             var mockComService = new MockCommunicationService();
-            var msgBus = new MessageBus(mockComService, new MockLogger(), new MessageBusOptions());
+            var msgBus = new MessageBus(mockComService, new MockLogger(), new MessageBusOptions(), null);
             msgBus.RegisterSubscriptionConsumer(typeof(TestMessageNested), typeof(TestMessageConsumer), ConsumeStrategy.Synchronous);
 
             var messageAsJson = msgBus.WrapMessage(msg);
             mockComService.InvokeMessageReceived(messageAsJson);
 
             var messageRecieved = TestMessageConsumer.LastMessageReceived;
-            Assert.Equal(messageRecieved.GetType().FullName, typeof(TestMessageNested).FullName);
+            Assert.AreEqual(messageRecieved.GetType().FullName, typeof(TestMessageNested).FullName);
             var asMessage = (TestMessageNested)messageRecieved;
-            Assert.Equal(asMessage.Text, textToCheck);
-            Assert.Equal(asMessage.MessageInternal.Text, internalTextToCheck);
+            Assert.AreEqual(asMessage.Text, textToCheck);
+            Assert.AreEqual(asMessage.MessageInternal.Text, internalTextToCheck);
         }
     }
 }

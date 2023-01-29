@@ -27,8 +27,8 @@ namespace MakoIoT.Device.Services.Messaging.Test
             var sut = new SynchronousConsumerQueue("Test", () => consumer, logger);
             sut.Consume(context);
 
-            Assert.Same(context, consumer.Context);
-            Assert.False(logger.HasWarningsOrErrors);
+            Assert.AreSame(context, consumer.Context);
+            Assert.IsFalse(logger.HasWarningsOrErrors);
 
         }
 
@@ -92,11 +92,10 @@ namespace MakoIoT.Device.Services.Messaging.Test
                 Debug.WriteLine(message);
             }
 
-            Assert.True(context1Consumed, "message 1 not consumed");
-            Assert.True(context2Consumed, "message 2 not consumed");
-            Assert.True(context3Consumed, "message 3 not consumed");
-
-            Assert.False(logger.HasWarningsOrErrors);
+            Assert.IsTrue(context1Consumed, "message 1 not consumed");
+            Assert.IsTrue(context2Consumed, "message 2 not consumed");
+            Assert.IsTrue(context3Consumed, "message 3 not consumed");
+            Assert.IsFalse(logger.HasWarningsOrErrors);
         }
 
         [TestMethod]
@@ -159,11 +158,10 @@ namespace MakoIoT.Device.Services.Messaging.Test
                 Debug.WriteLine(message);
             }
 
-            Assert.True(context1Consumed, "message 1 not consumed");
-            Assert.False(context2Consumed, "message 2 consumed");
-            Assert.True(context3Consumed, "message 3 not consumed");
-
-            Assert.False(logger.HasWarningsOrErrors);
+            Assert.IsTrue(context1Consumed, "message 1 not consumed");
+            Assert.IsFalse(context2Consumed, "message 2 consumed");
+            Assert.IsTrue(context3Consumed, "message 3 not consumed");
+            Assert.IsFalse(logger.HasWarningsOrErrors);
         }
 
         public class TestConsumer : IConsumer
