@@ -1,4 +1,6 @@
-# Project readme
+# Mako-IoT.Device.Services.Messaging
+
+Message bus with pub-sub and stronly typed data contracts. Uses similar concept as [MassTransit](https://masstransit.io/).
 
 ## How to manually sync fork
 - Clone repository and navigate into folder
