@@ -8,7 +8,7 @@ using MakoIoT.Messages;
 using Microsoft.Extensions.Logging;
 using nanoFramework.Json;
 using MakoIoT.Device.Services.Messaging.MessageConverters;
-using nanoFramework.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 
 [assembly: InternalsVisibleTo("NFUnitTest")]
 namespace MakoIoT.Device.Services.Messaging
