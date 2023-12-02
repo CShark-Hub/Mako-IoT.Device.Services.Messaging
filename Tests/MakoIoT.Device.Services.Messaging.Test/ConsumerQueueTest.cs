@@ -87,11 +87,6 @@ namespace MakoIoT.Device.Services.Messaging.Test
             consumer.Semaphore.Set();
             Thread.Sleep(1);
 
-            foreach (string message in logger.GetAllMessages())
-            {
-                Debug.WriteLine(message);
-            }
-
             Assert.IsTrue(context1Consumed, "message 1 not consumed");
             Assert.IsTrue(context2Consumed, "message 2 not consumed");
             Assert.IsTrue(context3Consumed, "message 3 not consumed");
@@ -152,11 +147,6 @@ namespace MakoIoT.Device.Services.Messaging.Test
             Thread.Sleep(1);
             consumer.Semaphore.Set();
             Thread.Sleep(1);
-
-            foreach (string message in logger.GetAllMessages())
-            {
-                Debug.WriteLine(message);
-            }
 
             Assert.IsTrue(context1Consumed, "message 1 not consumed");
             Assert.IsFalse(context2Consumed, "message 2 consumed");

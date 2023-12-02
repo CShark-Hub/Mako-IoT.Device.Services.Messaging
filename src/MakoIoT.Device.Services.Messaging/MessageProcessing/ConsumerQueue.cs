@@ -1,5 +1,4 @@
 ﻿using MakoIoT.Device.Services.Interface;
-using Microsoft.Extensions.Logging;
 
 namespace MakoIoT.Device.Services.Messaging.MessageProcessing
 {
@@ -8,10 +7,10 @@ namespace MakoIoT.Device.Services.Messaging.MessageProcessing
     public abstract class ConsumerQueue : IConsumerQueue
     {
         protected readonly ConsumerFactory _consumerFactory;
-        protected readonly ILogger _logger;
+        protected readonly ILog _logger;
         public string Name { get; }
 
-        public ConsumerQueue(string name, ConsumerFactory consumerFactory, ILogger logger)
+        public ConsumerQueue(string name, ConsumerFactory consumerFactory, ILog logger)
         {
             Name = name;
             _consumerFactory = consumerFactory;

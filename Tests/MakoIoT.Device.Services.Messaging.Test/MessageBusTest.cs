@@ -2,7 +2,6 @@
 using MakoIoT.Device.Services.Interface;
 using MakoIoT.Device.Services.Messaging.Test.Mocks;
 using MakoIoT.Messages;
-using Microsoft.Extensions.Logging;
 using nanoFramework.TestFramework;
 
 namespace MakoIoT.Device.Services.Messaging.Test
@@ -50,7 +49,7 @@ namespace MakoIoT.Device.Services.Messaging.Test
 
             commSvc.InvokeMessageReceived(messageText);
 
-            Assert.AreEqual(1, logger.GetMessages(LogLevel.Error).Count);
+            Assert.AreEqual(1, logger.GetMessages(LogEventLevel.Error).Count);
             
             Assert.IsFalse(ConsumerCalled);
         }
@@ -72,7 +71,7 @@ namespace MakoIoT.Device.Services.Messaging.Test
 
             commSvc.InvokeMessageReceived(messageText);
 
-            Assert.AreEqual(1, logger.GetMessages(LogLevel.Warning).Count);
+            Assert.AreEqual(1, logger.GetMessages(LogEventLevel.Warning).Count);
             Assert.IsFalse(logger.HasErrors);
             Assert.IsFalse(ConsumerCalled);
         }
