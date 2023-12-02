@@ -5,7 +5,6 @@ using MakoIoT.Device.Services.Interface;
 using MakoIoT.Device.Services.Messaging.MessageProcessing;
 using MakoIoT.Device.Utilities.String.Extensions;
 using MakoIoT.Messages;
-using Microsoft.Extensions.Logging;
 using nanoFramework.Json;
 using MakoIoT.Device.Services.Messaging.MessageConverters;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,12 +18,12 @@ namespace MakoIoT.Device.Services.Messaging
         private readonly ArrayList _subscriptions = new ArrayList();
 
         private readonly ICommunicationService _communicationService;
-        private readonly ILogger _logger;
+        private readonly ILog _logger;
         private readonly IServiceProvider serviceProvider;
 
         private static bool isInitialized;
 
-        public MessageBus(ICommunicationService communicationService, ILogger logger, MessageBusOptions options, IServiceProvider serviceProvider)
+        public MessageBus(ICommunicationService communicationService, ILog logger, MessageBusOptions options, IServiceProvider serviceProvider)
         {
             if (!isInitialized)
             {
@@ -58,7 +57,7 @@ namespace MakoIoT.Device.Services.Messaging
             }
             catch (Exception e)
             {
-                _logger.LogCritical(e, "Communication service can't connect");
+                _logger.Critical(e, "Communication service can't connect");
             }
         }
 
@@ -70,7 +69,7 @@ namespace MakoIoT.Device.Services.Messaging
             }
             catch (Exception e)
             {
-                _logger.LogError(e, "Error disconnecting communication service");
+                _logger.Error("Error disconnecting communication service", e);
             }
             
         }
@@ -115,7 +114,7 @@ namespace MakoIoT.Device.Services.Messaging
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Error publishing message {message.MessageType}");
+                _logger.Error($"Error publishing message {message.MessageType}", e);
             }
         }
 
@@ -137,7 +136,7 @@ namespace MakoIoT.Device.Services.Messaging
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Error sending message {message.MessageType}");
+                _logger.Error($"Error sending message {message.MessageType}", e);
             }
             
         }
@@ -155,7 +154,7 @@ namespace MakoIoT.Device.Services.Messaging
 
             var envelopeString = JsonConvert.SerializeObject(envelope);
 
-            _logger.LogDebug(envelopeString.EscapeForInterpolation());
+            _logger.Trace(envelopeString.EscapeForInterpolation());
             return envelopeString;
         }
 
@@ -167,18 +166,18 @@ namespace MakoIoT.Device.Services.Messaging
 
                 if (!_consumerQueues.Contains(envelope.Message.MessageType))
                 {
-                    _logger.LogWarning($"No consumer for message type {envelope.Message.MessageType}");
+                    _logger.Warning($"No consumer for message type {envelope.Message.MessageType}");
                     return;
                 }
 
-                _logger.LogDebug($"Received message of type {envelope.Message.MessageType}");
+                _logger.Trace($"Received message of type {envelope.Message.MessageType}");
 
                 var consumer = (IConsumerQueue)_consumerQueues[envelope.Message.MessageType];
                 consumer.Consume(new ConsumeContext(envelope));
             }
             catch (Exception exception)
             {
-                _logger.LogError(exception, "Error processing message");
+                _logger.Error("Error processing message", exception);
             }
         }
     }

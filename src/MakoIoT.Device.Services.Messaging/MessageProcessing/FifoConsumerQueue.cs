@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Threading;
 using MakoIoT.Device.Services.Interface;
-using Microsoft.Extensions.Logging;
 
 namespace MakoIoT.Device.Services.Messaging.MessageProcessing
 {
@@ -14,7 +13,7 @@ namespace MakoIoT.Device.Services.Messaging.MessageProcessing
         public event EventHandler ProcessingStarted;
         public event EventHandler ProcessingFinished;
 
-        public FifoConsumerQueue(string name, ConsumerFactory consumerFactory, ILogger logger) : base(name, consumerFactory, logger)
+        public FifoConsumerQueue(string name, ConsumerFactory consumerFactory, ILog logger) : base(name, consumerFactory, logger)
         {
             _queue = new Queue();
         }
@@ -36,13 +35,13 @@ namespace MakoIoT.Device.Services.Messaging.MessageProcessing
                 return;
 
             _isProcessing = true;
-            _logger.LogTrace($"[{Name}] Starting processing thread");
+            _logger.Trace($"[{Name}] Starting processing thread");
             new Thread(ProcessMessage).Start();
         }
 
         private void ProcessMessage()
         {
-            _logger.LogTrace($"[{Name}] processing thread started");
+            _logger.Trace($"[{Name}] processing thread started");
             try
             {
                 var context = SafeDequeue();
@@ -53,7 +52,7 @@ namespace MakoIoT.Device.Services.Messaging.MessageProcessing
                 }
                 while (context != null)
                 {
-                    _logger.LogDebug($"[{Name}] Consuming message {context.MessageId}");
+                    _logger.Trace($"[{Name}] Consuming message {context.MessageId}");
 
                     try
                     {
@@ -61,7 +60,7 @@ namespace MakoIoT.Device.Services.Messaging.MessageProcessing
                     }
                     catch (Exception e)
                     {
-                        _logger.LogError(e, $"[{Name}] Error processing message");
+                        _logger.Error($"[{Name}] Error processing message", e);
                     }
 
                     Thread.Sleep(1);
@@ -73,7 +72,7 @@ namespace MakoIoT.Device.Services.Messaging.MessageProcessing
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"[{Name}] Error processing message from queue");
+                _logger.Error($"[{Name}] Error processing message from queue", e);
             }
         }
 
@@ -84,7 +83,7 @@ namespace MakoIoT.Device.Services.Messaging.MessageProcessing
                 _queue.Enqueue(context);
             }
 
-            _logger.LogTrace($"[{Name}] Message {context.MessageId} queued");
+            _logger.Trace($"[{Name}] Message {context.MessageId} queued");
             OnMessageEnqueue();
         }
     }
